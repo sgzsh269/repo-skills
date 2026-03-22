@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/check-docs-update.sh",
+            "timeout": 10,
+            "statusMessage": "Checking if docs need updating..."
+          }
+        ]
+      }
+    ]
+  }
+}

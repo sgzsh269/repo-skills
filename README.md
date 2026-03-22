@@ -1,20 +1,51 @@
 # repo-skills
 
-A Claude Code plugin with skills for working with git repositories — analyzing, documenting, and transforming codebases.
+Agent skills for working with git repositories — analyzing, documenting, and transforming codebases. Works with [Claude Code](https://claude.ai/code) as a plugin and with any AI agent via the [Skills CLI](https://skills.sh).
 
 ## Installation
 
-Install from a marketplace:
+### Claude Code
+
+Install as a plugin from a marketplace:
 
 ```bash
-claude plugin install repo-skills@<marketplace-name>
+/plugin install repo-skills@<marketplace-name>
 ```
 
-Or test locally during development:
+Or install from this GitHub repo directly:
+
+```bash
+/plugin marketplace add sgzsh269/repo-skills
+/plugin install repo-skills@sgzsh269-repo-skills
+```
+
+After installing, run `/reload-plugins` to activate. Skills are namespaced under the plugin name:
+
+```
+/repo-skills:repo-skill-factory <repo-path>
+```
+
+See the [Claude Code plugins guide](https://code.claude.com/docs/en/discover-plugins.md) for more details on managing plugins and marketplaces.
+
+#### Local development
+
+To test the plugin locally during development:
 
 ```bash
 claude --plugin-dir /path/to/repo-skills
 ```
+
+### Skills CLI (any agent)
+
+Install with the [Skills CLI](https://skills.sh) to use with any compatible AI agent:
+
+```bash
+npx skills add sgzsh269/repo-skills
+```
+
+This makes the skills available to any agent that supports the [Agent Skills specification](https://agentskills.io/specification.md).
+
+See the [Skills CLI docs](https://skills.sh/docs) for more details.
 
 ## Skills
 
