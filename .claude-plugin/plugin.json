@@ -1,0 +1,6 @@
+{
+  "name": "repo-skills",
+  "description": "Convert any git repository into a Claude Skill with pre-digested docs and live repo access",
+  "version": "1.0.0",
+  "keywords": ["skill-factory", "repository", "documentation"]
+}
