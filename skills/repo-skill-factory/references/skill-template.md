@@ -13,6 +13,12 @@ description: >
   Work with {{repo_name}} — {{description}}.
   Use when the user wants to {{use_cases}}.
   Also use when someone mentions {{trigger_keywords}}.
+metadata:
+  source-commit: {{source_commit}}
+  source-branch: {{source_branch}}
+  source-tag: {{source_tag}}        # omit if empty
+  source-dirty: "{{source_dirty}}"
+  generated-at: {{generated_date}}
 ---
 ```
 
@@ -25,6 +31,7 @@ description: >
 
 - **Repo location:** `${CLAUDE_SKILL_DIR}/repo/`
 - **Language:** {{primary_language}}
+- **Source version:** `{{source_commit_short}}` ({{source_branch}}){{#if source_tag}} tag `{{source_tag}}`{{/if}}{{#if source_dirty}} ⚠ dirty{{/if}}, generated {{generated_date}}
 - **Install:** `bash ${CLAUDE_SKILL_DIR}/scripts/setup.sh`
 {{#if cli_command}}
 - **CLI:** `{{cli_command}} --help`

@@ -9,7 +9,11 @@ description: >
   or wants to make a repo's capabilities available as a Claude skill.
   Do NOT use for creating skills from scratch that aren't based on an
   existing repository.
-argument-hint: <repo-path> [--output <output-dir>]
+compatibility: Requires Python 3 and git
+metadata:
+  argument-hint: "<repo-path> [--output <output-dir>]"
+  author: repo-skills
+  version: "1.0"
 ---
 
 # /repo-skills:repo-skill-factory
@@ -34,7 +38,23 @@ Validate:
 
 If the path is relative, resolve it from the current working directory.
 
-## Step 2: Run Automated Analysis
+## Step 2: Capture Source Repo Version
+
+Record the exact version of the source repo being converted so the generated
+skill can identify what it was built from:
+
+```bash
+cd <repo-path>
+SOURCE_COMMIT=$(git rev-parse HEAD)
+SOURCE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+SOURCE_TAG=$(git describe --tags --exact-match 2>/dev/null || echo "")
+SOURCE_DIRTY=$(git diff --quiet && echo "false" || echo "true")
+cd -
+```
+
+Save these values — they will be embedded in the generated skill's metadata.
+
+## Step 3: Run Automated Analysis
 
 Run the analysis script to get a structured JSON report of the repo:
 
@@ -48,7 +68,7 @@ This produces a JSON report with: `languages`, `entry_points`, `docs`,
 Read the output. If the script fails, fall back to manual exploration:
 read the README, list directories, check for package files.
 
-## Step 3: Read the Language Profile
+## Step 4: Read the Language Profile
 
 Read [references/language-profiles.md](references/language-profiles.md) and
 find the section matching the detected primary language. This tells you:
@@ -56,7 +76,7 @@ find the section matching the detected primary language. This tells you:
 - How dependencies and installation work
 - Common project structure patterns
 
-## Step 4: Deep Understanding (Claude Analysis)
+## Step 5: Deep Understanding (Claude Analysis)
 
 Using the automated analysis as a foundation, build a mental model of the repo.
 Read these files (in this priority order, stop when you have enough context):
@@ -74,7 +94,7 @@ Produce a mental model covering:
 - Common pitfalls or non-obvious patterns
 - Who the target audience is (developers, data scientists, ops, etc.)
 
-## Step 5: Generate the Skill
+## Step 6: Generate the Skill
 
 Create the output directory structure:
 
@@ -85,7 +105,7 @@ mkdir -p <output-dir>/scripts
 
 Generate each file in order:
 
-### 5a. Generate `references/api-reference.md`
+### 6a. Generate `references/api-reference.md`
 
 Run the API extraction script:
 
@@ -102,7 +122,7 @@ your improvements:
 - Remove internal/private APIs that leaked through
 - Keep it factual — only document what actually exists in the source
 
-### 5b. Generate `references/examples.md`
+### 6b. Generate `references/examples.md`
 
 Run the example curation script:
 
@@ -118,7 +138,7 @@ Read the raw output. Then write `<output-dir>/references/examples.md`:
 - Remove examples that are too similar to each other
 - Ensure code blocks have correct language tags
 
-### 5c. Generate `scripts/setup.sh`
+### 6c. Generate `scripts/setup.sh`
 
 Write `<output-dir>/scripts/setup.sh` based on the language and dependencies
 from the analysis. Use the templates from
@@ -132,7 +152,7 @@ The setup script should:
 
 Make it executable: `chmod +x <output-dir>/scripts/setup.sh`
 
-### 5d. Create Repo Symlink
+### 6d. Create Repo Symlink
 
 ```bash
 ln -sf $(realpath <repo-path>) <output-dir>/repo
@@ -140,7 +160,7 @@ ln -sf $(realpath <repo-path>) <output-dir>/repo
 
 This enables live exploration of the repo through the generated skill.
 
-### 5e. Generate `SKILL.md`
+### 6e. Generate `SKILL.md`
 
 This is the most important file. Read
 [references/skill-template.md](references/skill-template.md) for the structure,
@@ -153,6 +173,12 @@ Key guidelines for the generated SKILL.md:
 - `description`: 2-3 sentences covering what it does AND when to trigger it.
   Be specific about trigger keywords. Be slightly "pushy" — err toward
   triggering too often rather than too rarely.
+- `metadata`: include source repo version info captured in Step 2:
+  - `source-commit`: the full commit SHA
+  - `source-branch`: the branch name
+  - `source-tag`: the tag if on an exact tag, omit otherwise
+  - `source-dirty`: "true" if the working tree had uncommitted changes
+  - `generated-at`: the current date (YYYY-MM-DD)
 **Body structure:**
 - Start with a 2-3 sentence overview
 - Include a "Quick Reference" box with repo location, language, install command, CLI
@@ -171,7 +197,7 @@ Key guidelines for the generated SKILL.md:
 - Use `${CLAUDE_SKILL_DIR}` for all path references
 - Include actual code snippets for common tasks (copied from examples, not invented)
 
-## Step 6: Validate
+## Step 7: Validate
 
 Check your work:
 
@@ -183,7 +209,7 @@ Check your work:
 5. Smoke test: "If someone asked 'how do I get started with <repo-name>?',
    does this skill have enough info to answer without exploring the repo?"
 
-## Step 7: Report
+## Step 8: Report
 
 Tell the user what was created:
 
@@ -202,8 +228,9 @@ The skill covers:
 - <N> examples curated
 - CLI commands: <list>
 - Primary language: <language>
+- Source version: <commit-sha-short> (<branch>) [<tag>] [dirty]
 
-To test: run `/skill-creator` and use the generated skill with test prompts.
+To test: use the generated skill with test prompts.
 To install: the skill is already in .claude/skills/ and will be auto-discovered.
 ```
 
