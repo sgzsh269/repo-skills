@@ -1,6 +1,12 @@
 {
   "name": "repo-skills",
-  "description": "Convert any git repository into a Claude Skill with pre-digested docs and live repo access",
-  "version": "1.0.0",
-  "keywords": ["skill-factory", "repository", "documentation"]
+  "description": "Convert any git repository into an Agent Skill with pre-digested docs and live repo access. Works with Claude Code, VS Code Copilot, Codex, and any compatible agent.",
+  "version": "2.0.0",
+  "author": {
+    "name": "sgzsh269"
+  },
+  "homepage": "https://github.com/sgzsh269/repo-skills",
+  "repository": "https://github.com/sgzsh269/repo-skills",
+  "license": "MIT",
+  "keywords": ["skill-factory", "repository", "documentation", "agent-skills"]
 }

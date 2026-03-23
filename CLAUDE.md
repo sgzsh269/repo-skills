@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-Agent skills for working with git repositories, packaged as a Claude Code plugin. Skills follow the [Agent Skills specification](https://agentskills.io/specification.md) and work with Claude Code, VS Code Copilot, and any compatible agent. Skills live under `skills/` as subdirectories containing a `SKILL.md` and supporting files.
+Agent skills for working with git repositories, packaged as a Claude Code plugin. Skills follow the [Agent Skills specification](https://agentskills.io/specification.md) and work with Claude Code, VS Code Copilot, Codex, and any compatible agent. Skills live under `skills/` as subdirectories containing a `SKILL.md` and supporting files.
 
 ## Plugin Structure
 

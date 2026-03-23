@@ -1,0 +1,21 @@
+{
+  "name": "repo-skills-plugins",
+  "owner": {
+    "name": "Sagar Shah",
+    "url": "https://github.com/sgzsh269"
+  },
+  "metadata": {
+    "description": "Skills for converting git repositories into Agent Skills"
+  },
+  "plugins": [
+    {
+      "name": "repo-skills",
+      "source": "./",
+      "description": "Convert any git repository into an Agent Skill with pre-digested docs and live repo access. Works with Claude Code, VS Code Copilot, Codex, and any compatible agent.",
+      "version": "2.0.0",
+      "license": "MIT",
+      "keywords": ["skill-factory", "repository", "documentation", "agent-skills"],
+      "category": "development"
+    }
+  ]
+}

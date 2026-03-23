@@ -22,7 +22,7 @@ Convert a git repository into a hybrid Agent Skill: pre-digested documentation
 for fast common queries + live repo access for deep exploration.
 
 Generates skills compatible with the [Agent Skills specification](https://agentskills.io/specification.md),
-which works with Claude Code, VS Code Copilot, and any agent that supports the spec.
+which works with Claude Code, VS Code Copilot, Codex, and any agent that supports the spec.
 
 ## Step 1: Parse Arguments
 
@@ -269,8 +269,8 @@ To test: use the generated skill with test prompts.
 For `generic` agent type:
 ```
 The skill is in .agents/skills/ and follows the Agent Skills specification.
-It will be auto-discovered by compatible agents (VS Code Copilot, Claude Code,
-OpenAI Codex, etc.) that scan .agents/skills/.
+It will be auto-discovered by compatible agents (VS Code Copilot, Codex,
+Claude Code, etc.) that scan .agents/skills/.
 To test: type /skills in your agent to verify it appears, then test with prompts.
 ```
 

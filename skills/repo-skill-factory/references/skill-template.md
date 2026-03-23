@@ -2,7 +2,7 @@
 
 This is the template used when generating a skill from a repository. Placeholders use `{{name}}` syntax and are filled in during generation.
 
-The generated skill follows the [Agent Skills specification](https://agentskills.io/specification.md) and is compatible with any agent that supports it (Claude Code, VS Code Copilot, OpenAI Codex, etc.).
+The generated skill follows the [Agent Skills specification](https://agentskills.io/specification.md) and is compatible with any agent that supports it (Claude Code, VS Code Copilot, Codex, etc.).
 
 ---
 

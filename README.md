@@ -6,17 +6,11 @@ Agent skills for working with git repositories — analyzing, documenting, and t
 
 ### Claude Code
 
-Install as a plugin from a marketplace:
-
-```bash
-/plugin install repo-skills@<marketplace-name>
-```
-
-Or install from this GitHub repo directly:
+Add the marketplace and install the plugin:
 
 ```bash
 /plugin marketplace add sgzsh269/repo-skills
-/plugin install repo-skills@sgzsh269-repo-skills
+/plugin install repo-skills@repo-skills-plugins
 ```
 
 After installing, run `/reload-plugins` to activate. Skills are namespaced under the plugin name:
