@@ -51,13 +51,19 @@ See the [Skills CLI docs](https://skills.sh/docs) for more details.
 
 ### repo-skill-factory
 
-Convert any git repository into a Claude Skill using a hybrid approach: pre-digested documentation for fast common queries + live repo access for deep exploration.
+Convert any git repository into an Agent Skill using a hybrid approach: pre-digested documentation for fast common queries + live repo access for deep exploration.
 
 ```
-/repo-skills:repo-skill-factory <repo-path> [--output <output-dir>]
+/repo-skills:repo-skill-factory <repo-path> [--output <output-dir>] [--agent claude|generic]
 ```
 
 Supports Python, JavaScript/TypeScript, Rust, and Go.
+
+The `--agent` flag controls the output format:
+- **`claude`** — outputs to `.claude/skills/`, uses `${CLAUDE_SKILL_DIR}` for paths
+- **`generic`** (default) — outputs to `.agents/skills/`, uses relative paths per the [Agent Skills spec](https://agentskills.io/specification.md)
+
+If omitted, the agent type is auto-detected from your project structure (`.claude/` → claude, otherwise → generic).
 
 #### How it works
 

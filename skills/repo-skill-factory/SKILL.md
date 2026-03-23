@@ -1,34 +1,48 @@
 ---
 name: repo-skill-factory
 description: >
-  Convert any git repository into a Claude Skill using a hybrid approach
+  Convert any git repository into an Agent Skill using a hybrid approach
   (pre-digested docs + live repo access). Use when the user wants to create
   a skill from a repository, library, framework, or codebase. Also trigger
   when someone says "make a skill for this repo", "turn this library into
   a skill", "create a skill from this codebase", "skillify this repo",
-  or wants to make a repo's capabilities available as a Claude skill.
+  or wants to make a repo's capabilities available as an agent skill.
   Do NOT use for creating skills from scratch that aren't based on an
   existing repository.
 compatibility: Requires Python 3 and git
 metadata:
-  argument-hint: "<repo-path> [--output <output-dir>]"
+  argument-hint: "<repo-path> [--output <output-dir>] [--agent claude|generic]"
   author: repo-skills
-  version: "1.0"
+  version: "2.0"
 ---
 
 # /repo-skills:repo-skill-factory
 
-Convert a git repository into a hybrid Claude Skill: pre-digested documentation
+Convert a git repository into a hybrid Agent Skill: pre-digested documentation
 for fast common queries + live repo access for deep exploration.
+
+Generates skills compatible with the [Agent Skills specification](https://agentskills.io/specification.md),
+which works with Claude Code, VS Code Copilot, and any agent that supports the spec.
 
 ## Step 1: Parse Arguments
 
-Extract the repo path from `$ARGUMENTS`. Optionally extract `--output <dir>`.
+Extract the repo path from `$ARGUMENTS`. Optionally extract `--output <dir>`
+and `--agent <type>`.
 
 ```
 Repo path: $ARGUMENTS (first non-flag argument)
-Output dir: --output value, or default to .claude/skills/<repo-name>/
+Output dir: --output value, or auto-detected (see below)
+Agent type: --agent value, one of: "claude", "generic" (default: auto-detect)
 ```
+
+**Agent type auto-detection:**
+- If the current project has a `.claude/` directory → `claude`
+- If the current project has a `.agents/` directory → `generic`
+- Otherwise → `generic` (follows the Agent Skills specification)
+
+**Output directory defaults by agent type:**
+- `claude`: `.claude/skills/<repo-name>/`
+- `generic`: `.agents/skills/<repo-name>/`
 
 Validate:
 - The repo path exists and is a directory
@@ -169,16 +183,28 @@ then write `<output-dir>/SKILL.md` filling in all sections from your analysis.
 Key guidelines for the generated SKILL.md:
 
 **Frontmatter:**
-- `name`: the kebab-case skill name
+- `name`: the kebab-case skill name (must match the directory name)
 - `description`: 2-3 sentences covering what it does AND when to trigger it.
   Be specific about trigger keywords. Be slightly "pushy" — err toward
-  triggering too often rather than too rarely.
+  triggering too often rather than too rarely. Max 1024 characters.
+- `compatibility`: note required tools/runtimes (e.g., "Requires Python 3.10+
+  and git")
 - `metadata`: include source repo version info captured in Step 2:
   - `source-commit`: the full commit SHA
   - `source-branch`: the branch name
   - `source-tag`: the tag if on an exact tag, omit otherwise
   - `source-dirty`: "true" if the working tree had uncommitted changes
   - `generated-at`: the current date (YYYY-MM-DD)
+  - `agent-type`: the agent type used for generation ("claude" or "generic")
+
+**Agent-specific path references in the body:**
+- For `claude` agent type: use `${CLAUDE_SKILL_DIR}` for all paths (Claude Code
+  resolves this to the skill directory at runtime)
+- For `generic` agent type: use relative paths from the SKILL.md file
+  (e.g., `scripts/setup.sh`, `references/api-reference.md`, `repo/`).
+  Generic agents following the Agent Skills spec resolve paths relative to
+  the skill root directory.
+
 **Body structure:**
 - Start with a 2-3 sentence overview
 - Include a "Quick Reference" box with repo location, language, install command, CLI
@@ -194,7 +220,7 @@ Key guidelines for the generated SKILL.md:
 **Quality bar:**
 - Under 500 lines total
 - No hallucinated APIs — everything mentioned must exist in the source
-- Use `${CLAUDE_SKILL_DIR}` for all path references
+- Use the correct path prefix for the agent type (see above)
 - Include actual code snippets for common tasks (copied from examples, not invented)
 
 ## Step 7: Validate
@@ -229,9 +255,23 @@ The skill covers:
 - CLI commands: <list>
 - Primary language: <language>
 - Source version: <commit-sha-short> (<branch>) [<tag>] [dirty]
+- Agent type: <claude|generic>
+```
 
+**Agent-specific install instructions:**
+
+For `claude` agent type:
+```
+The skill is in .claude/skills/ and will be auto-discovered by Claude Code.
 To test: use the generated skill with test prompts.
-To install: the skill is already in .claude/skills/ and will be auto-discovered.
+```
+
+For `generic` agent type:
+```
+The skill is in .agents/skills/ and follows the Agent Skills specification.
+It will be auto-discovered by compatible agents (VS Code Copilot, Claude Code,
+OpenAI Codex, etc.) that scan .agents/skills/.
+To test: type /skills in your agent to verify it appears, then test with prompts.
 ```
 
 ## Guardrails
