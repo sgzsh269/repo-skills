@@ -1,6 +1,17 @@
 # repo-skills
 
-Agent skills for working with git repositories — analyzing, documenting, and transforming codebases. Works with [Claude Code](https://claude.ai/code) as a plugin and with any AI agent via the [Skills CLI](https://skills.sh).
+Agent skills for working with git repositories, analyzing, documenting, and transforming codebases. Works with [Claude Code](https://claude.ai/code) as a plugin and with any AI agent via the [Skills CLI](https://skills.sh).
+
+## Why
+
+AI coding agents struggle with libraries that aren't well-represented in their training data. Internal packages, newer frameworks, niche tools: the agent either hallucinates APIs or gives generic advice.
+
+`repo-skill-factory` solves this by turning any git repo into an Agent Skill. It analyzes the actual codebase, parses ASTs to extract real API signatures, curates usage examples, and generates structured documentation your agent can reference instead of guessing.
+
+**Great for:**
+- Internal libraries and frameworks that no model has seen
+- Newer open source projects that post-date training cutoffs
+- Domain-specific tools where the agent needs precise API knowledge, not approximations
 
 ## Installation
 
